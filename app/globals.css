@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Paleta sobria: papel cálido, tinta oscura, un solo acento verde musgo. */
+:root {
+  --fondo: #f7f5f0;
+  --tinta: #1f2421;
+  --tenue: #5b625e;
+  --acento: #3f5a4a;
+  --linea: #dcd8cf;
+}
+
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-tinta: var(--tinta);
+  --color-tenue: var(--tenue);
+  --color-acento: var(--acento);
+  --color-linea: var(--linea);
+  --font-titulos: var(--font-titulos);
+  --font-texto: var(--font-texto);
+}
+
+body {
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--font-texto), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titulos), Georgia, serif;
+}

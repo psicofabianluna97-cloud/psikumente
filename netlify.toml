@@ -1,0 +1,9 @@
+# Configuración de despliegue en Netlify.
+# Netlify detecta Next.js y aplica su adaptador automáticamente.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
