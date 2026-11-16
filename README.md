@@ -122,3 +122,24 @@ Netlify publica solo cada vez que haces `git push`.
 | `scripts/` | Utilidades de mantenimiento |
 | `next.config.ts` | Cabeceras de seguridad y, desde la fase 4, redirecciones |
 | `netlify.toml` | Configuración de despliegue |
+
+---
+
+## Fase 2 — Páginas principales
+
+| Ruta | Archivo |
+|---|---|
+| `/` | `app/page.tsx` |
+| `/algo-cambio` (enlace de la bio) | `app/algo-cambio/page.tsx` |
+| `/como-trabajo` | `app/como-trabajo/page.tsx` |
+| `/sobre-mi` | `app/sobre-mi/page.tsx` |
+| `/agendar` y `/contacto` | Temporales hasta la fase 5 |
+
+Textos que se editan sin tocar las páginas:
+
+- `content/cambios.ts`: los seis cambios cotidianos.
+- `content/preguntas.ts`: preguntas frecuentes.
+- `lib/sitio.ts`: tarifa, modalidad, trayectoria, líneas de crisis, foto y tarjeta profesional.
+
+Para agregar la foto: guárdala en `public/` (por ejemplo `public/fabian-luna.jpg`) y en `lib/sitio.ts`
+cambia `foto: null` por `foto: "/fabian-luna.jpg"`.
