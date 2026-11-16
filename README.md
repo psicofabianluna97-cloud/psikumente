@@ -3,7 +3,7 @@
 Sitio de la consulta de psicología clínica de Fabián Luna.
 Next.js + TypeScript + Tailwind, desplegado en Netlify desde GitHub.
 
-> Este README crece en cada fase. Al final incluirá cómo publicar un artículo en menos de 5 minutos.
+> Este README crece en cada fase. Para publicar un artículo, ve a la sección **Fase 3**.
 
 ---
 
@@ -143,3 +143,92 @@ Textos que se editan sin tocar las páginas:
 
 Para agregar la foto: guárdala en `public/` (por ejemplo `public/fabian-luna.jpg`) y en `lib/sitio.ts`
 cambia `foto: null` por `foto: "/fabian-luna.jpg"`.
+
+---
+
+## Fase 3 — Artículos y panel de contenido
+
+### Publicar un artículo en menos de 5 minutos
+
+**Opción A: desde la terminal (funciona siempre)**
+
+```powershell
+node scripts/nuevo-articulo.js "Título del artículo" 19-25
+```
+
+El último dato es el público: `19-25`, `26-35` o `padres`. Se crea el archivo
+`content/articulos/titulo-del-articulo.md`, en UTF-8 sin BOM y como borrador.
+
+1. Abre el archivo en VS Code y completa la descripción, las etiquetas y el texto.
+2. Revísalo en http://localhost:3000/articulos (`npm run dev`). Los borradores solo se ven en tu equipo.
+3. Cuando esté listo, cambia `borrador: true` por `borrador: false`.
+4. Publica:
+
+```powershell
+git add --all
+git commit -m "Artículo: título del artículo"
+git push
+```
+
+**Opción B: desde el panel**
+
+- En tu equipo: `npm run dev` y abre http://localhost:3000/admin. Guarda en los archivos del
+  proyecto; después publicas con `git add --all`, `git commit` y `git push`.
+- En el sitio publicado (después de activarlo, ver abajo): entra a `/admin` desde cualquier
+  navegador, escribe y pulsa **Guardar**. El cambio se publica solo en uno o dos minutos.
+
+### Campos de cada artículo
+
+| Campo | Qué es |
+|---|---|
+| `titulo` | Título visible. Entre 10 y 90 caracteres. |
+| `descripcion` | Una o dos frases. La muestran Google y el listado. |
+| `fecha` | Formato `AAAA-MM-DD`. |
+| `publico` | `19-25`, `26-35` o `padres`. |
+| `etiquetas` | Lista de temas. Cada uno genera una página en `/articulos/tema/...`. |
+| `borrador` | `true`: no se publica. `false`: se publica. |
+
+El nombre del archivo es la dirección del artículo (el *slug*).
+Si falta un campo o tiene un valor inválido, `npm run build` se detiene y dice qué archivo corregir.
+
+### Qué se edita desde el panel
+
+- **Artículos**
+- **Los seis cambios** (`content/cambios.json`)
+- **Preguntas frecuentes** (`content/preguntas.json`)
+- **Ajustes del sitio** (`content/ajustes.json`): tarifa, duración, modalidad y ciudad,
+  tarjeta profesional, foto, redes y enlace de la agenda.
+
+### Activar el panel en el sitio publicado (una sola vez)
+
+Mientras no hagas estos pasos, `/admin` en el sitio publicado muestra "El panel todavía no
+está activado" y no acepta ninguna conexión.
+
+1. En la terminal, detén el sitio si está corriendo y ejecuta:
+
+   ```powershell
+   npm run panel:configurar
+   ```
+
+2. Abre http://localhost:3000/keystatic. El panel te guía para **crear una GitHub App**.
+   - Inicia sesión con la cuenta **psicofabianluna97-cloud**.
+   - Cuando pida la dirección del sitio publicado, escribe la de Netlify
+     (por ejemplo `https://papaya-liger-2975d0.netlify.app`).
+   - Al final, instala la app **solo en el repositorio `psikumente`**.
+3. Se crea un archivo `.env` en la carpeta del proyecto con cuatro claves. **No lo subas ni lo
+   compartas**: git ya lo ignora.
+4. En Netlify: **Project configuration → Environment variables → Add a variable**. Copia las
+   cuatro, con el mismo nombre y valor que tienen en `.env`:
+   - `KEYSTATIC_GITHUB_CLIENT_ID`
+   - `KEYSTATIC_GITHUB_CLIENT_SECRET`
+   - `KEYSTATIC_SECRET`
+   - `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+5. En Netlify: **Deploys → Trigger deploy → Deploy project**.
+6. Detén la terminal (`Ctrl + C`) y entra a `/admin` en el sitio publicado.
+
+Solo puede entrar al panel quien tenga permiso de escritura en el repositorio de GitHub.
+Hoy eres solo tú, con verificación en dos pasos.
+
+Cuando el sitio pase a psikumente.com (fase 4), hay que agregar la nueva dirección en la
+GitHub App: *GitHub → Settings → Developer settings → GitHub Apps → la app → Callback URL*,
+añadiendo `https://psikumente.com/api/keystatic/github/oauth/callback`.

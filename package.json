@@ -7,12 +7,18 @@
     "verificar": "node scripts/verificar-utf8.js",
     "build": "node scripts/verificar-utf8.js && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "nuevo-articulo": "node scripts/nuevo-articulo.js",
+    "panel:configurar": "node scripts/configurar-panel.js"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource-variable/playfair-display": "^5.3.0",
-    "next": "16.4.3",
+    "@keystatic/core": "^0.6.9",
+    "@keystatic/next": "^5.0.5",
+    "@markdoc/markdoc": "^0.5.13",
+    "js-yaml": "^5.5.0",
+    "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
@@ -22,7 +28,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.6",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

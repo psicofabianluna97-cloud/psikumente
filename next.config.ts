@@ -11,8 +11,6 @@ const cabecerasSeguridad = [
 ];
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
-  partialPrefetching: true,
   poweredByHeader: false,
   turbopack: {
     rules: {
@@ -21,6 +19,10 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  // /admin es la dirección fácil de recordar; el panel vive en /keystatic.
+  async redirects() {
+    return [{ source: "/admin", destination: "/keystatic", permanent: false }];
   },
   async headers() {
     return [{ source: "/:path*", headers: cabecerasSeguridad }];
