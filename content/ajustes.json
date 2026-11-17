@@ -1,0 +1,13 @@
+{
+  "tarifaValor": 80000,
+  "duracionMinutos": 50,
+  "virtual": true,
+  "presencial": false,
+  "ciudad": "",
+  "tarjetaProfesional": "",
+  "foto": "",
+  "instagram": "",
+  "tiktok": "",
+  "youtube": "",
+  "agendaUrl": ""
+}
