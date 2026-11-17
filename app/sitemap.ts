@@ -15,7 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/algo-cambio"), changeFrequency: "monthly", priority: 0.9 },
     { url: url("/como-trabajo"), changeFrequency: "monthly", priority: 0.9 },
     { url: url("/sobre-mi"), changeFrequency: "yearly", priority: 0.7 },
-    // /agendar y /contacto se agregan en la fase 5, cuando dejen de ser páginas temporales.
+    { url: url("/agendar"), changeFrequency: "yearly", priority: 0.8 },
+    { url: url("/contacto"), changeFrequency: "yearly", priority: 0.5 },
     {
       url: url("/articulos"),
       changeFrequency: "weekly",

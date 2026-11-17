@@ -316,3 +316,100 @@ indexó y cuáles no, con el motivo.
 Con el sitio corriendo (`npm run dev`), abre http://localhost:3000/opengraph-image para ver la
 imagen. Para validar los datos estructurados de una página ya publicada:
 https://search.google.com/test/rich-results
+
+---
+
+## Fase 5 — Agenda y formulario de contacto
+
+El sitio no guarda datos de ninguna persona. Las reservas quedan en Google Calendar y los
+mensajes del formulario llegan al Gmail de la consulta.
+
+### 1. Crear la agenda de citas
+
+1. Entra a https://calendar.google.com con **psicofabianluna97@gmail.com**.
+2. **Crear → Agenda de citas**. Configura:
+   - Título: por ejemplo, "Sesión de psicología en línea".
+   - Duración: 50 minutos.
+   - Tu disponibilidad semanal y el tiempo mínimo de anticipación para reservar.
+   - En **Formulario de reserva**, agrega el **teléfono** como campo obligatorio.
+   - En **Descripción**, escribe las instrucciones de pago: medio (Bold, Nequi o
+     transferencia), valor, plazo antes de la sesión y a dónde enviar el comprobante.
+     Agrega también: "Por favor, no escribas detalles de tu situación personal en la reserva".
+3. Guarda. Luego pulsa **Compartir → Insertar en sitio web**. Google muestra un código que
+   empieza por `<iframe src="https://calendar.google.com/calendar/appointments/schedules/...`.
+   **Copia solo la dirección** que está entre las comillas de `src`.
+4. Pégala en el panel: **Ajustes del sitio → Enlace de la agenda de Google Calendar**. Guarda
+   y publica (`git add --all`, `git commit`, `git push`).
+
+Con esa dirección, la agenda aparece dentro de `/agendar`. Si pegas el enlace corto
+(`https://calendar.app.google/...`), también funciona, pero se abre en una pestaña nueva.
+El sitio solo acepta direcciones de Google Calendar; cualquier otra se ignora.
+
+La persona debe aceptar el aviso de privacidad antes de ver los horarios. Hasta ese momento,
+su navegador no se conecta con Google.
+
+### 2. Activar el formulario de contacto
+
+En tu equipo (`npm run dev`) el formulario funciona en **modo de prueba**: no envía correos y
+muestra el mensaje en la terminal. En el sitio publicado aparece "El formulario se habilita
+pronto" hasta que configures las cuatro claves siguientes.
+
+**a) Contraseña de aplicación de Gmail** (para que el sitio pueda enviarte el correo)
+
+1. Entra a https://myaccount.google.com/security con la cuenta de la consulta.
+2. Activa la **Verificación en dos pasos** si aún no lo está. Es obligatoria para el paso siguiente.
+3. Abre https://myaccount.google.com/apppasswords, escribe el nombre "Web Psiku" y pulsa **Crear**.
+4. Google muestra una clave de 16 letras. Cópiala: no se vuelve a mostrar.
+
+Esa clave solo permite enviar correo. Si algún día sospechas que se filtró, la borras en esa
+misma página y creas otra, sin cambiar tu contraseña de Google.
+
+**b) Antispam Turnstile de Cloudflare** (gratuito)
+
+1. Crea una cuenta en https://dash.cloudflare.com/sign-up con el correo de la consulta.
+2. En el menú, entra a **Turnstile → Add widget**.
+3. Nombre: "Psiku contacto". En **Hostnames** agrega la dirección de Netlify
+   (por ejemplo `papaya-liger-2975d0.netlify.app`) y `psikumente.com`. Modo: **Managed**.
+4. Al crear, Cloudflare entrega dos claves: **Site key** y **Secret key**.
+
+**c) Guardar las claves en Netlify**
+
+**Project configuration → Environment variables → Add a variable**, una por una:
+
+| Nombre | Valor |
+|---|---|
+| `GMAIL_USUARIO` | `psicofabianluna97@gmail.com` |
+| `GMAIL_CLAVE_APP` | La clave de 16 letras, sin espacios |
+| `NEXT_PUBLIC_TURNSTILE_CLAVE_SITIO` | La *Site key* de Turnstile |
+| `TURNSTILE_CLAVE_SECRETA` | La *Secret key* de Turnstile |
+
+Luego: **Deploys → Trigger deploy → Deploy project**.
+
+Estas claves no van en el código ni en GitHub. No las envíes por chat ni por correo.
+
+**d) Probar**
+
+Entra a `/contacto` en el sitio publicado, envía un mensaje de prueba y revisa que llegue a tu
+Gmail con el asunto `[Web] Pregunta de ...`. Al pulsar **Responder**, la respuesta va directo
+al correo de la persona.
+
+**e) Etiqueta "Web" en Gmail (opcional)**
+
+En Gmail: **Configuración → Filtros → Crear filtro**. En *Asunto* escribe `[Web]`, pulsa
+**Crear filtro** y marca **Aplicar la etiqueta → Nueva etiqueta → Web**.
+
+### Qué protege al formulario
+
+- Solo acepta envíos hechos desde el propio sitio.
+- Turnstile comprueba que quien escribe es una persona.
+- Un campo trampa invisible descarta bots sencillos.
+- Máximo 3 mensajes cada 10 minutos por dirección IP.
+- El servidor valida cada campo; el mensaje tiene máximo 500 caracteres.
+- El correo se envía como texto plano: nada de lo que escriba la persona se ejecuta.
+- El sitio no guarda el mensaje ni lo escribe en sus registros.
+
+### Política de contenido (CSP)
+
+`next.config.ts` define qué puede cargar el navegador: el propio sitio, la agenda de Google y
+Turnstile. Todo lo demás se bloquea. Si más adelante incrustas otro servicio, hay que
+agregarlo ahí.
