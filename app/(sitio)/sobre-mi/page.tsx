@@ -4,17 +4,21 @@ import { LlamadoFinal } from "@/components/LlamadoFinal";
 import { Monograma } from "@/components/Marca";
 import { Seccion } from "@/components/Seccion";
 import { sitio, trayectoria } from "@/lib/sitio";
+import { metadatos } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { esquemaPersona } from "@/lib/esquemas";
 
-export const metadata: Metadata = {
-  title: "Sobre mí",
-  description:
+export const metadata: Metadata = metadatos({
+  titulo: "Sobre mí",
+  descripcion:
     "Fabián Luna, psicólogo clínico egresado de la Universidad El Bosque. Terapia de Aceptación y Compromiso con jóvenes y adultos, en modalidad virtual.",
-  alternates: { canonical: "/sobre-mi" },
-};
+  ruta: "/sobre-mi",
+});
 
 export default function SobreMi() {
   return (
     <>
+      <JsonLd datos={esquemaPersona()} />
       <section className="mx-auto grid max-w-5xl gap-10 px-4 pb-6 pt-16 sm:px-6 sm:pt-20 md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <h1 className="text-5xl text-marino-hondo sm:text-6xl">{sitio.profesional}</h1>

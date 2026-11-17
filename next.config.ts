@@ -22,7 +22,17 @@ const nextConfig: NextConfig = {
   },
   // /admin es la dirección fácil de recordar; el panel vive en /keystatic.
   async redirects() {
-    return [{ source: "/admin", destination: "/keystatic", permanent: false }];
+    return [
+      { source: "/admin", destination: "/keystatic", permanent: false },
+      // Direcciones del sitio anterior (HTML estático). Redirección permanente
+      // para que Google traslade lo que ya tenía indexado.
+      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/servicios.html", destination: "/como-trabajo", permanent: true },
+      { source: "/sobre-mi.html", destination: "/sobre-mi", permanent: true },
+      { source: "/bibliografia.html", destination: "/articulos", permanent: true },
+      { source: "/empleos.html", destination: "/", permanent: true },
+      { source: "/admin.html", destination: "/", permanent: true },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: cabecerasSeguridad }];

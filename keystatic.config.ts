@@ -156,6 +156,10 @@ export default config({
         tiktok: fields.url({ label: "TikTok (enlace completo)" }),
         youtube: fields.url({ label: "YouTube (enlace completo)" }),
         agendaUrl: fields.url({ label: "Enlace de la agenda de Google Calendar" }),
+        googleVerificacion: fields.text({
+          label: "Código de verificación de Google Search Console",
+          description: "Solo el código que entrega Google, sin la etiqueta HTML. Opcional.",
+        }),
       },
     }),
   },

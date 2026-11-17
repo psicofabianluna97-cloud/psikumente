@@ -3,13 +3,14 @@ import Link from "next/link";
 import { ListadoArticulos } from "@/components/ListadoArticulos";
 import { LlamadoFinal } from "@/components/LlamadoFinal";
 import { obtenerArticulos, obtenerEtiquetas } from "@/lib/articulos";
+import { metadatos } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Artículos",
-  description:
+export const metadata: Metadata = metadatos({
+  titulo: "Artículos",
+  descripcion:
     "Textos breves sobre cómo cambian los hábitos según lo que sentimos: sueño, postergación, aislamiento, pantallas. Para mirar a tiempo lo cotidiano.",
-  alternates: { canonical: "/articulos" },
-};
+  ruta: "/articulos",
+});
 
 export default function Articulos() {
   const articulos = obtenerArticulos();

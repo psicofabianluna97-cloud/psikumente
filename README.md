@@ -232,3 +232,87 @@ Hoy eres solo tú, con verificación en dos pasos.
 Cuando el sitio pase a psikumente.com (fase 4), hay que agregar la nueva dirección en la
 GitHub App: *GitHub → Settings → Developer settings → GitHub Apps → la app → Callback URL*,
 añadiendo `https://psikumente.com/api/keystatic/github/oauth/callback`.
+
+---
+
+## Fase 4 — SEO y redirecciones
+
+### Qué quedó automático
+
+| Elemento | Dónde | Qué hace |
+|---|---|---|
+| `sitemap.xml` | `app/sitemap.ts` | Lista las páginas, los artículos publicados y los temas. Se actualiza en cada publicación. |
+| `robots.txt` | `app/robots.ts` | Permite el sitio y bloquea el panel. |
+| Título, descripción y canónica | `lib/seo.ts` | Una función (`metadatos`) que usa cada página. |
+| Tarjeta al compartir | `app/opengraph-image.tsx` | Imagen con la marca para WhatsApp, Instagram y X. |
+| Datos estructurados | `lib/esquemas.ts` | Profesional, servicio, preguntas frecuentes y artículos, en formato schema.org. |
+| Redirecciones 301 | `next.config.ts` | De las direcciones `.html` viejas a las nuevas. |
+
+Las redirecciones:
+
+| Dirección anterior | Dirección nueva |
+|---|---|
+| `/index.html` | `/` |
+| `/servicios.html` | `/como-trabajo` |
+| `/sobre-mi.html` | `/sobre-mi` |
+| `/bibliografia.html` | `/articulos` |
+| `/empleos.html` | `/` |
+| `/admin.html` | `/` |
+
+### El interruptor de indexación
+
+En `lib/sitio.ts` está la línea `indexable: false`. Mientras siga en `false`:
+
+- todas las páginas le dicen a Google que no las indexe,
+- `robots.txt` bloquea el sitio completo,
+- `sitemap.xml` sale vacío.
+
+Así el sitio de prueba en Netlify no compite con psikumente.com. **Se cambia a `true` el mismo
+día en que el dominio apunte al sitio nuevo**, no antes.
+
+### El día del cambio de dominio (después de la fase 5)
+
+1. **Netlify → Domain management → Add a domain** y escribe `psikumente.com`. Netlify muestra
+   los registros DNS que necesita. Usa exactamente los valores que te muestre.
+2. **Hostinger → Dominios → psikumente.com → DNS**: reemplaza el registro `A` de `@` y el
+   `CNAME` de `www` por los de Netlify. **No toques los registros `MX` ni `TXT`**: son del correo.
+3. Espera a que Netlify marque el dominio como verificado y emita el certificado HTTPS
+   (de minutos a unas horas).
+4. En `lib/sitio.ts` cambia `indexable: false` por `indexable: true`. Luego:
+
+   ```powershell
+   npm run build
+   git add --all
+   git commit -m "Activa la indexación"
+   git push
+   ```
+
+5. Comprueba en el navegador: `https://psikumente.com/servicios.html` debe llevarte a
+   `/como-trabajo`, y `https://psikumente.com/sitemap.xml` debe listar las páginas.
+6. Agrega la nueva dirección en la GitHub App del panel (ver fase 3).
+7. Cuando todo funcione, cancela el plan de alojamiento de Hostinger (no el dominio) y elimina
+   el proyecto de Firebase y la cuenta de EmailJS del sitio anterior.
+
+### Registrar el sitio en Google Search Console
+
+Se hace después del paso 4 anterior.
+
+1. Entra a https://search.google.com/search-console con **psicofabianluna97@gmail.com**.
+2. **Agregar propiedad → Dominio** y escribe `psikumente.com`.
+3. Google entrega un registro `TXT`. Cópialo en **Hostinger → DNS → Agregar registro**
+   (tipo `TXT`, nombre `@`). Vuelve a Search Console y pulsa **Verificar**.
+   - Alternativa sin DNS: elige "Prefijo de la URL", método "Etiqueta HTML", copia solo el
+     código (lo que va dentro de `content="..."`) y pégalo en el panel, en
+     **Ajustes del sitio → Código de verificación de Google Search Console**.
+4. En el menú **Sitemaps**, escribe `sitemap.xml` y pulsa **Enviar**.
+5. En **Inspección de URLs**, pega `https://psikumente.com/` y pulsa **Solicitar indexación**.
+   Repite con `/algo-cambio` y `/como-trabajo`.
+
+Google tarda entre unos días y unas semanas en reflejar los cambios. En **Páginas** verás cuáles
+indexó y cuáles no, con el motivo.
+
+### Revisar cómo se ve un enlace al compartirlo
+
+Con el sitio corriendo (`npm run dev`), abre http://localhost:3000/opengraph-image para ver la
+imagen. Para validar los datos estructurados de una página ya publicada:
+https://search.google.com/test/rich-results

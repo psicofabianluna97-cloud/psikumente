@@ -5,6 +5,9 @@ import { ContenidoArticulo } from "@/components/ContenidoArticulo";
 import { LlamadoFinal } from "@/components/LlamadoFinal";
 import { obtenerArticulo, obtenerArticulos } from "@/lib/articulos";
 import { formatearFecha, slugificar } from "@/lib/texto";
+import { JsonLd } from "@/components/JsonLd";
+import { esquemaArticulo, esquemaMigas } from "@/lib/esquemas";
+import { metadatos } from "@/lib/seo";
 import { publicos, sitio } from "@/lib/sitio";
 
 // Cada artículo se genera como página estática al publicar.
@@ -19,18 +22,12 @@ export async function generateMetadata({ params }: PageProps<"/articulos/[slug]"
   const { slug } = await params;
   const articulo = obtenerArticulo(slug);
   if (!articulo) return {};
-  return {
-    title: articulo.titulo,
-    description: articulo.descripcion,
-    alternates: { canonical: `/articulos/${articulo.slug}` },
-    openGraph: {
-      type: "article",
-      title: articulo.titulo,
-      description: articulo.descripcion,
-      publishedTime: articulo.fecha,
-      authors: [sitio.profesional],
-    },
-  };
+  return metadatos({
+    titulo: articulo.titulo,
+    descripcion: articulo.descripcion,
+    ruta: `/articulos/${articulo.slug}`,
+    articulo: { fecha: articulo.fecha, etiquetas: articulo.etiquetas },
+  });
 }
 
 export default async function PaginaArticulo({ params }: PageProps<"/articulos/[slug]">) {
@@ -40,6 +37,16 @@ export default async function PaginaArticulo({ params }: PageProps<"/articulos/[
 
   return (
     <>
+      <JsonLd
+        datos={[
+          esquemaArticulo(articulo),
+          esquemaMigas([
+            { nombre: "Inicio", ruta: "/" },
+            { nombre: "Artículos", ruta: "/articulos" },
+            { nombre: articulo.titulo, ruta: `/articulos/${articulo.slug}` },
+          ]),
+        ]}
+      />
       <article className="mx-auto max-w-5xl px-4 pb-16 pt-12 sm:px-6 sm:pt-16">
         <div className="max-w-3xl">
           <p className="texto text-sm">

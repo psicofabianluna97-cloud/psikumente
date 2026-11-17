@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Encabezado } from "@/components/Encabezado";
 import { Pie } from "@/components/Pie";
+import { tituloPorDefecto } from "@/lib/seo";
 import { sitio } from "@/lib/sitio";
 import "../globals.css";
 
@@ -28,12 +29,15 @@ const texto = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(sitio.dominio),
   title: {
-    default: `${sitio.profesional}, ${sitio.titulo.toLowerCase()} · ${sitio.marca}`,
+    default: tituloPorDefecto,
     template: `%s · ${sitio.marca}`,
   },
   description: sitio.descripcion,
-  authors: [{ name: sitio.profesional }],
+  authors: [{ name: sitio.profesional, url: `${sitio.dominio}/sobre-mi` }],
+  creator: sitio.profesional,
+  formatDetection: { telephone: false, email: false, address: false },
   robots: sitio.indexable ? { index: true, follow: true } : { index: false, follow: false },
+  ...(sitio.googleVerificacion ? { verification: { google: sitio.googleVerificacion } } : {}),
 };
 
 export const viewport: Viewport = {

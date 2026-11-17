@@ -18,6 +18,7 @@ type Ajustes = {
   tiktok?: string | null;
   youtube?: string | null;
   agendaUrl?: string | null;
+  googleVerificacion?: string;
 };
 
 const ajustes: Ajustes = ajustesCrudos;
@@ -82,8 +83,11 @@ export const sitio = {
   // Se configura en la fase 5 (página de citas de Google Calendar).
   agendaUrl: texto(ajustes.agendaUrl),
 
-  // Mientras sea false, el sitio le pide a Google que NO lo indexe.
-  // Se cambia a true en la fase 4, cuando el sitio esté listo y apunte a psikumente.com.
+  // Código de verificación de Google Search Console (solo el código, sin la etiqueta).
+  googleVerificacion: texto(ajustes.googleVerificacion),
+
+  // Mientras sea false, el sitio le pide a Google que NO lo indexe y el sitemap queda vacío.
+  // Se cambia a true el día en que psikumente.com apunte al sitio nuevo (ver README, fase 4).
   indexable: false,
 };
 

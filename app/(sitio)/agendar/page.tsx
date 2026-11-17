@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Proximamente } from "@/components/Proximamente";
+import { metadatos } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Agendar una cita",
-  alternates: { canonical: "/agendar" },
-};
+export const metadata: Metadata = metadatos({
+  titulo: "Agendar una cita",
+  ruta: "/agendar",
+  indexar: false,
+});
 
 // Temporal: en la fase 5 aquí va la agenda de Google Calendar.
 export default function Agendar() {

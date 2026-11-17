@@ -4,17 +4,21 @@ import { LlamadoFinal } from "@/components/LlamadoFinal";
 import { Proceso } from "@/components/Proceso";
 import { Seccion } from "@/components/Seccion";
 import { preguntas } from "@/content/preguntas";
+import { metadatos } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { esquemaPreguntas, esquemaServicio } from "@/lib/esquemas";
 
-export const metadata: Metadata = {
-  title: "Cómo trabajo",
-  description:
+export const metadata: Metadata = metadatos({
+  titulo: "Cómo trabajo",
+  descripcion:
     "Terapia psicológica virtual para jóvenes y adultos en Colombia: para quién es, cómo es el proceso, enfoque, valor de la sesión y preguntas frecuentes.",
-  alternates: { canonical: "/como-trabajo" },
-};
+  ruta: "/como-trabajo",
+});
 
 export default function ComoTrabajo() {
   return (
     <>
+      <JsonLd datos={[esquemaServicio(), esquemaPreguntas(preguntas)]} />
       <section className="mx-auto max-w-5xl px-4 pb-6 pt-16 sm:px-6 sm:pt-20">
         <h1 className="max-w-3xl text-5xl text-marino-hondo sm:text-6xl">Cómo trabajo</h1>
         <p className="mt-6 max-w-2xl text-lg text-tenue sm:text-xl">

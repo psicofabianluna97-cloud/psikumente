@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TarjetaArticulo } from "@/components/TarjetaArticulo";
 import { articulosPorEtiqueta, obtenerEtiquetas } from "@/lib/articulos";
+import { metadatos } from "@/lib/seo";
 
 // Una dirección que no corresponde a un archivo existente responde "no encontrada".
 export const dynamicParams = false;
@@ -17,11 +18,11 @@ export async function generateMetadata({
   const { etiqueta } = await params;
   const tema = obtenerEtiquetas().find((e) => e.slug === etiqueta);
   if (!tema) return {};
-  return {
-    title: `Artículos sobre ${tema.nombre}`,
-    description: `Textos sobre ${tema.nombre} y cómo se relaciona con lo que sentimos.`,
-    alternates: { canonical: `/articulos/tema/${tema.slug}` },
-  };
+  return metadatos({
+    titulo: `Artículos sobre ${tema.nombre}`,
+    descripcion: `Textos sobre ${tema.nombre} y cómo se relaciona con lo que sentimos.`,
+    ruta: `/articulos/tema/${tema.slug}`,
+  });
 }
 
 export default async function Tema({ params }: PageProps<"/articulos/tema/[etiqueta]">) {

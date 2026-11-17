@@ -8,14 +8,18 @@ import { Proceso } from "@/components/Proceso";
 import { Seccion } from "@/components/Seccion";
 import { cambios } from "@/content/cambios";
 import { sitio, textoModalidad } from "@/lib/sitio";
+import { metadatos } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { esquemaPersona, esquemaServicio, esquemaSitio } from "@/lib/esquemas";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = metadatos({
+  ruta: "/",
+});
 
 export default function Inicio() {
   return (
     <>
+      <JsonLd datos={[esquemaSitio(), esquemaServicio(), esquemaPersona()]} />
       {/* Portada: la frase central es el elemento principal */}
       <section className="mx-auto max-w-5xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
         <h1 className="max-w-4xl text-[2.6rem] text-marino-hondo sm:text-6xl lg:text-7xl">

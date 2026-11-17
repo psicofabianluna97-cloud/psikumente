@@ -6,14 +6,15 @@ import { LlamadoFinal } from "@/components/LlamadoFinal";
 import { Seccion } from "@/components/Seccion";
 import { cambios } from "@/content/cambios";
 import { formatearTarifa, sitio, textoModalidad } from "@/lib/sitio";
+import { metadatos } from "@/lib/seo";
 
 // Página de entrada desde Instagram y TikTok (enlace de la bio).
-export const metadata: Metadata = {
-  title: "Algo cambió en tu rutina",
-  description:
+export const metadata: Metadata = metadatos({
+  titulo: "Algo cambió en tu rutina",
+  descripcion:
     "Seis cambios cotidianos que vale la pena mirar antes de que se vuelvan algo mayor. No hace falta estar muy mal para empezar terapia.",
-  alternates: { canonical: "/algo-cambio" },
-};
+  ruta: "/algo-cambio",
+});
 
 export default function AlgoCambio() {
   return (
